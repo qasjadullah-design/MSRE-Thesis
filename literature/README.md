@@ -1,0 +1,3 @@
+# Literature workstream
+Record source title/authors/date, DOI or URL, precise conclusions, approach, shortcomings, relation to each objective, and whether a result is empirical, simulation, proposal, or regulatory decision.
+Separate source bibliography from regulatory rules. The literature chapter and research gap are due 31-Dec-2026. Do not upload copyrighted full PDFs to public GitHub; use private Drive.
