@@ -1,0 +1,2 @@
+# Data management
+Original datasets and private evidence belong in Google Drive 03_Raw_Data. GitHub holds public-safe input manifests, source URLs, version/coverage, licenses, timezone, units, SHA-256 where appropriate and processing scripts. Data-center flexibility assumptions are never silently labeled measured. Synthetic toy data are explicitly marked synthetic. No passwords, confidential data or huge binaries in git.
