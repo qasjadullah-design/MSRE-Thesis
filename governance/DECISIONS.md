@@ -3,7 +3,7 @@
 | ID | Status | Decision or question |
 |---|---|---|
 | D01 | TH-1 approved | Official title and three objectives are fixed |
-| D02 | TH-1 approved | Six due dates; deployment is 30-May-2027 |
+| D02 | User-updated working schedule (23-Oct-2026) | Six working dates; deployment is **31-May-2027**. Earlier TH-1 text said 30 May; formal amendment not verified. |
 | D03 | Proposed | PJM-relevant testbed, not yet shown to run |
 | D04 | Proposed | 1 GW nominal scenario; size/location sensitivities |
 | D05 | Proposed | Start with tested 3–5 bus site/connection model |
