@@ -12,17 +12,17 @@ Gigawatt-scale data-center demand creates questions about transmission access, i
 2. Calibrate data-center flexibility using observed behavior from FERC/PJM and Texas SB6 filings.
 3. Quantify system cost, reliability, emissions, and incumbent ratepayer cost per GW of new load under each contract design.
 
-## Final submitted TH-1 milestones
+## Current working milestones (user update: 23-Oct-2026)
 | Milestone | Deadline |
 |---|---|
 | Literature Review | 31-Dec-2026 |
 | Data Collection | 31-Jan-2027 |
 | Data Analysis | 15-Mar-2027 |
-| Model Deployment | **30-May-2027** |
+| Model Deployment | **31-May-2027** |
 | Result Evaluation | 30-Jun-2027 |
 | Thesis and Article Write-up | 31-Jul-2027 |
 
-**Note:** Earlier conversation plans used 31 May for model deployment; the submitted TH-1 Annex B specifies **30 May 2027**. The TH-1 controls. Defense date has not been confirmed here.
+**Schedule control (updated 23-Oct-2026):** The user explicitly set **31 May 2027** as the current model-deployment deadline. The earlier submitted TH-1 text in this repository cited 30 May; formal amendment/approval of the university form has not been verified. Keep the six current working dates unchanged absent another explicit revision. Defense date is not confirmed.
 
 ## Start here — every human or AI contributor
 1. Read [AGENTS.md](AGENTS.md) and [governance/PROJECT_BRIEF.md](governance/PROJECT_BRIEF.md).
