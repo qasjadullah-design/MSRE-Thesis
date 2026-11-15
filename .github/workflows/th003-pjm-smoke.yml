@@ -1,0 +1,92 @@
+# TH-003: does upstream PyPSA-USA build and solve a PJM-only footprint?
+#
+# Runs on a GitHub-hosted Linux runner because the pinned PyPSA-USA environment
+# cannot be imported on the project's Windows workstation (see
+# docs/PJM_BASELINE_FEASIBILITY.md, section 5).
+#
+# This is a feasibility test. A green run shows the pipeline executes for the
+# PJM footprint; it does not validate the model against PJM outcomes.
+
+name: TH-003 PJM smoke test
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - th-003-pypsa-usa-pjm-feasibility
+    paths:
+      - "configs/pypsa-usa/**"
+      - "tools/summarize_network.py"
+      - ".github/workflows/th003-pjm-smoke.yml"
+
+permissions:
+  contents: read
+
+env:
+  PYPSA_USA_REF: 04a0edd220b1d331715c269a4eab68344c07a088 # v1.0.0
+  CONFIG: ${{ github.workspace }}/thesis/configs/pypsa-usa/config.pjm_smoke.yaml
+  SOLVED: results/pjm_smoke/eastern/networks/elec_s50_c22_ec_lv1.0_1h_E.nc
+
+jobs:
+  smoke:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 240
+    steps:
+      - name: Check out thesis repository
+        uses: actions/checkout@v4
+        with:
+          path: thesis
+
+      - name: Check out PyPSA-USA at the pinned commit
+        uses: actions/checkout@v4
+        with:
+          repository: PyPSA/pypsa-usa
+          ref: ${{ env.PYPSA_USA_REF }}
+          path: pypsa-usa
+
+      - name: Free disk space on the runner
+        run: |
+          sudo rm -rf /usr/share/dotnet /opt/ghc /usr/local/lib/android /opt/hostedtoolcache/CodeQL
+          df -h /
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+
+      - name: Install the locked PyPSA-USA environment
+        working-directory: pypsa-usa
+        run: |
+          bash init_pypsa_usa.sh
+          uv sync --frozen
+          uv run python -c "import sys, pypsa, linopy, snakemake, highspy; print('python', sys.version.split()[0], '| pypsa', pypsa.__version__, '| linopy', linopy.__version__, '| snakemake', snakemake.__version__)"
+
+      - name: Dry run (validates the config and lists the jobs)
+        working-directory: pypsa-usa/workflow
+        run: uv run snakemake -n -j4 --scheduler greedy --configfile "$CONFIG" "$SOLVED" | tail -n 60
+
+      - name: Build the PJM data model (no solver)
+        working-directory: pypsa-usa/workflow
+        run: uv run snakemake data_model -j4 --scheduler greedy --configfile "$CONFIG"
+
+      - name: Solve with HiGHS
+        working-directory: pypsa-usa/workflow
+        run: uv run snakemake -j4 --scheduler greedy --configfile "$CONFIG" "$SOLVED"
+
+      - name: Summarise the networks
+        if: always()
+        working-directory: pypsa-usa
+        run: |
+          uv run python "$GITHUB_WORKSPACE/thesis/tools/summarize_network.py" workflow >> "$GITHUB_STEP_SUMMARY"
+          df -h /
+
+      - name: Upload logs and networks
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: th003-pjm-smoke
+          retention-days: 30
+          if-no-files-found: warn
+          path: |
+            pypsa-usa/workflow/logs/
+            pypsa-usa/workflow/.snakemake/log/
+            pypsa-usa/workflow/results/pjm_smoke/
+            pypsa-usa/workflow/resources/pjm_smoke/networks/

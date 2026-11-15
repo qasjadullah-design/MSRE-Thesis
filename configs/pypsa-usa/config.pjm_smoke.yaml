@@ -1,0 +1,44 @@
+# TH-003 smoke test: can upstream PyPSA-USA build and solve a PJM-only footprint?
+#
+# Status: FEASIBILITY TEST ONLY. Not a calibrated or validated PJM baseline.
+# Upstream: PyPSA/pypsa-usa v1.0.0 (commit 04a0edd220b1d331715c269a4eab68344c07a088)
+#
+# This is a sparse overlay on upstream's config.default.yaml. It mirrors upstream's
+# own Tier B harness (workflow/repo_data/config/config.test.yaml) and changes only
+# the footprint (California -> PJM), the cluster counts that follow from it, and
+# the solver (Gurobi -> HiGHS). Lists are replaced wholesale by the merge.
+#
+# Run from pypsa-usa/workflow:
+#   uv run snakemake -j1 --scheduler greedy --configfile <path to this file>
+
+run:
+  name: "pjm_smoke"
+  disable_progressbar: true
+
+scenario:
+  interconnect: [eastern]      # PJM sits in the Eastern Interconnection
+  clusters: [22]               # ReEDS zonal backbone: one node per PJM ReEDS zone (22)
+  simpl: [50]                  # resource zones before final clustering (>= clusters)
+  opts: [1h]                   # hourly, no policy constraint tokens
+  scope: "total"
+  planning_horizons: [2030]    # as in upstream's harness: EFS 2030 demand, public GODEEEP 2030 profiles
+
+model_topology:
+  include:
+    trans_reg: ['PJM']         # ReEDS transmission region; zones p80, p99, p100, p104, p109-p126
+
+snapshots:                     # one day, as in upstream's harness
+  start: "2019-01-01 00:00"
+  end: "2019-01-01 23:00"
+  inclusive: both
+
+electricity:
+  renewable_carriers: [onwind, solar, hydro]
+  extendable_carriers:
+    Generator: [solar, onwind, OCGT, CCGT]
+    StorageUnit: [4hr_battery_storage]
+
+solving:
+  solver:
+    name: highs                # open-source; upstream default is Gurobi
+    options: highs-default
