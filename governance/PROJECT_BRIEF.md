@@ -11,6 +11,12 @@ Verbatim objectives:
 
 Rationale: rapid large-load growth raises grid planning, reliability and who-pays questions; regulatory rights and actual flexible behavior must be separately established. Relevance to Pakistan is transfer of a transparent analytic framework, NOT a primary Pakistan grid simulation.
 
-Working methodological choices, not supervisor-approved: PJM-relevant regional testbed; nominal 1 GW normalization plus load-size and location sensitivities; toy model before PJM; fixed-network dispatch then selective expansion. Need to validate regulatory status and evidence limitations.
+## PROPOSED scope refocus — NOT APPROVED
+
+> Gigawatt-scale data centres are asking for grid access faster than generation and transmission can be built. Regulators are responding with access contracts that trade firmness for speed. This thesis adds an open-source module to PyPSA-USA that represents firm, non-firm and interim non-firm access for a data-centre site, and applies it to a zonal PJM-relevant system for a forward year. Data-centre flexibility is entered as evidence-graded ranges, because metered curtailment at this scale is not public. The main result is the system cost avoided per GW as a function of the curtailment a data centre accepts, which gives a priority-service menu, together with curtailment, emissions and the incumbent-customer cost under two allocation rules. The model is zonal and deterministic: it does not establish site-level deliverability, N-1 security or probabilistic adequacy.
+
+**Working choices to consider, not approved:** forward-year capacity expansion followed by dispatch; zonal PJM-relevant testbed; principal 1 GW load plus one aggregate-scale sensitivity; three zones; curtailment-tolerance ε sweep; two deliberately simplified incumbent-cost allocation scenarios. This replaces an earlier dispatch-first working preference *only if approved*. Keep the statutory co-location/BTMG eligibility question and the distinction between accepted curtailment and actual physical ability as explicit open issues.
+
+**Source of proposal:** `governance/proposals/SCOPE_REFOCUS_2026-11-16.md` on branch `proposal/scope-refocus-2026-11-16`. Supervisory decisions S1–S5 remain pending.
 
 Private official TH-1: https://drive.google.com/drive/folders/1W2uX-lJbb5A0ygus0ScFan5AO_eSfZ95 (the actual PDF still needs uploading). Do NOT add signed forms to this public repository.
