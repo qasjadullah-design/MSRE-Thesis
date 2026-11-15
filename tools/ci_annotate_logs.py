@@ -1,0 +1,51 @@
+"""Surface the tail of the newest Snakemake and rule logs as GitHub error annotations.
+
+Usage: python ci_annotate_logs.py <path to pypsa-usa/workflow>
+
+Job logs on GitHub need a signed-in account with repository access; check-run
+annotations do not. Emitting the log tails as annotations lets a failed run be
+diagnosed from the public API.
+"""
+
+from __future__ import annotations
+
+import sys
+from pathlib import Path
+
+MAX_CHARS = 3500
+RULE_LOGS = 4
+
+
+def escape(text: str, is_property: bool = False) -> str:
+    text = text.replace("%", "%25").replace("\r", "%0D").replace("\n", "%0A")
+    if is_property:
+        text = text.replace(":", "%3A").replace(",", "%2C")
+    return text
+
+
+def tail(path: Path) -> str:
+    text = path.read_text(encoding="utf-8", errors="replace").rstrip()
+    return text[-MAX_CHARS:] if text else "(empty)"
+
+
+def newest(folder: Path, pattern: str, count: int) -> list[Path]:
+    if not folder.exists():
+        return []
+    files = [p for p in folder.rglob(pattern) if p.is_file()]
+    return sorted(files, key=lambda p: p.stat().st_mtime, reverse=True)[:count]
+
+
+def main() -> int:
+    workflow = Path(sys.argv[1])
+    targets = newest(workflow / ".snakemake" / "log", "*.log", 1) + newest(workflow / "logs", "*.log", RULE_LOGS)
+    if not targets:
+        print("::error title=ci_annotate_logs::no log files found")
+        return 0
+    for path in targets:
+        title = escape(str(path.relative_to(workflow)), is_property=True)
+        print(f"::error title={title}::{escape(tail(path))}")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

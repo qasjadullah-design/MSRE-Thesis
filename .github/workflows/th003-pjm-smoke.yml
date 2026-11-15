@@ -17,6 +17,7 @@ on:
     paths:
       - "configs/pypsa-usa/**"
       - "tools/summarize_network.py"
+      - "tools/ci_annotate_logs.py"
       - ".github/workflows/th003-pjm-smoke.yml"
 
 permissions:
@@ -26,6 +27,10 @@ env:
   PYPSA_USA_REF: 04a0edd220b1d331715c269a4eab68344c07a088 # v1.0.0
   CONFIG: ${{ github.workspace }}/thesis/configs/pypsa-usa/config.pjm_smoke.yaml
   SOLVED: results/pjm_smoke/eastern/networks/elec_s50_c22_ec_lv1.0_1h_E.nc
+
+defaults:
+  run:
+    shell: bash # -eo pipefail, so a failure upstream of a pipe fails the step
 
 jobs:
   smoke:
@@ -71,11 +76,16 @@ jobs:
         working-directory: pypsa-usa/workflow
         run: uv run snakemake -j4 --scheduler greedy --configfile "$CONFIG" "$SOLVED"
 
+      - name: Report log tails as annotations on failure
+        if: failure()
+        working-directory: pypsa-usa
+        run: python3 "$GITHUB_WORKSPACE/thesis/tools/ci_annotate_logs.py" workflow
+
       - name: Summarise the networks
         if: always()
         working-directory: pypsa-usa
         run: |
-          uv run python "$GITHUB_WORKSPACE/thesis/tools/summarize_network.py" workflow >> "$GITHUB_STEP_SUMMARY"
+          uv run python "$GITHUB_WORKSPACE/thesis/tools/summarize_network.py" workflow >> "$GITHUB_STEP_SUMMARY" || echo "No network to summarise." >> "$GITHUB_STEP_SUMMARY"
           df -h /
 
       - name: Upload logs and networks
