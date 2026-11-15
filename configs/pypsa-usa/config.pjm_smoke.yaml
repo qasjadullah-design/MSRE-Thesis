@@ -21,7 +21,7 @@ scenario:
   simpl: [50]                  # resource zones before final clustering (>= clusters)
   opts: [1h]                   # hourly, no policy constraint tokens
   scope: "total"
-  planning_horizons: [2030]    # as in upstream's harness: EFS 2030 demand, public GODEEEP 2030 profiles
+  planning_horizons: [2030]    # as in upstream's harness; 2030 is an EER model year and has public GODEEEP profiles
 
 model_topology:
   include:
@@ -33,6 +33,13 @@ snapshots:                     # one day, as in upstream's harness
   inclusive: both
 
 electricity:
+  # Demand: upstream's default (NREL EFS) is served from data.nlr.gov, which
+  # returned HTTP 503 for every request on 15-16 Nov 2026. EER profiles are
+  # hosted on Zenodo (record 18435264) and need no scaling data or API key.
+  demand:
+    profile: eer
+    scenario:
+      eer_file: demand_EER2025_Baseline_AEO2023.h5
   renewable_carriers: [onwind, solar, hydro]
   extendable_carriers:
     Generator: [solar, onwind, OCGT, CCGT]
