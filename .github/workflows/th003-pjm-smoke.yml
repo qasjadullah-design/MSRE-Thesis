@@ -24,7 +24,8 @@ permissions:
   contents: read
 
 env:
-  PYPSA_USA_REF: 04a0edd220b1d331715c269a4eab68344c07a088 # v1.0.0
+  # Not named PYPSA_*: PyPSA reads every PYPSA_* environment variable as one of its options.
+  UPSTREAM_REF: 04a0edd220b1d331715c269a4eab68344c07a088 # v1.0.0
   CONFIG: ${{ github.workspace }}/thesis/configs/pypsa-usa/config.pjm_smoke.yaml
   SOLVED: results/pjm_smoke/eastern/networks/elec_s50_c22_ec_lv1.0_1h_E.nc
 
@@ -46,7 +47,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: PyPSA/pypsa-usa
-          ref: ${{ env.PYPSA_USA_REF }}
+          ref: ${{ env.UPSTREAM_REF }}
           path: pypsa-usa
 
       - name: Free disk space on the runner
@@ -66,7 +67,7 @@ jobs:
 
       - name: Dry run (validates the config and lists the jobs)
         working-directory: pypsa-usa/workflow
-        run: uv run snakemake -n -j4 --scheduler greedy --configfile "$CONFIG" "$SOLVED" | tail -n 60
+        run: uv run snakemake "$SOLVED" -n -j4 --scheduler greedy --configfile "$CONFIG" | tail -n 80
 
       - name: Build the PJM data model (no solver)
         working-directory: pypsa-usa/workflow
@@ -74,7 +75,7 @@ jobs:
 
       - name: Solve with HiGHS
         working-directory: pypsa-usa/workflow
-        run: uv run snakemake -j4 --scheduler greedy --configfile "$CONFIG" "$SOLVED"
+        run: uv run snakemake "$SOLVED" -j4 --scheduler greedy --configfile "$CONFIG"
 
       - name: Report log tails as annotations on failure
         if: failure()
