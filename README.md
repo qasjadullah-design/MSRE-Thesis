@@ -4,8 +4,11 @@
 
 **Status:** Research and model design phase. This repository is an AI-assisted collaboration workspace, **not** a completed, validated PJM or PyPSA-USA model.
 
-## Thesis in one paragraph
-Gigawatt-scale data-center demand creates questions about transmission access, interruption rights, electricity-system reliability, infrastructure costs, emissions and who pays. The submitted NUST TH-1 proposes a reusable, open-source **PyPSA-USA extension** to represent **firm, non-firm, and interim non-firm** grid-access arrangements, to calibrate the physical flexibility of data centers from available real-world evidence (FERC/PJM and Texas SB6-related material), and to compare system and incumbent-ratepayer consequences per GW of new demand using a U.S. grid testbed.
+## Thesis in one paragraph — PROPOSED SCOPE REFOCUS (NOT APPROVED)
+
+> Gigawatt-scale data centres are asking for grid access faster than generation and transmission can be built. Regulators are responding with access contracts that trade firmness for speed. This thesis adds an open-source module to PyPSA-USA that represents firm, non-firm and interim non-firm access for a data-centre site, and applies it to a zonal PJM-relevant system for a forward year. Data-centre flexibility is entered as evidence-graded ranges, because metered curtailment at this scale is not public. The main result is the system cost avoided per GW as a function of the curtailment a data centre accepts, which gives a priority-service menu, together with curtailment, emissions and the incumbent-customer cost under two allocation rules. The model is zonal and deterministic: it does not establish site-level deliverability, N-1 security or probabilistic adequacy.
+
+**Approval status:** Draft from [Claude's 16 November 2026 scope-refocus proposal](governance/proposals/SCOPE_REFOCUS_2026-11-16.md) for student/supervisor review. This is *not* a change to the official TH-1 objectives, title or six working milestone dates. In particular, the exact tariff treatment, generator eligibility, evidence-limited flexibility calibration, and cost-incidence method remain subject to verification/approval.
 
 ## Official research objectives (verbatim from submitted TH-1)
 1. Develop an open-source PyPSA-USA module for firm, non-firm, and interim non-firm data-center grid-access contracts.
