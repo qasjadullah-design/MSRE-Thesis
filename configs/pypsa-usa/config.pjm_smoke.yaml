@@ -56,3 +56,9 @@ solving:
   solver:
     name: highs                # open-source; upstream default is Gurobi
     options: highs-default
+  solver_options:
+    highs-default:
+      # Upstream sets "off". Without crossover HiGHS ended run 43817556991 with
+      # "Model status: Unknown" although the interior-point solve converged, so
+      # optimality was not certified. Crossover gives a basic solution and a status.
+      run_crossover: "on"
