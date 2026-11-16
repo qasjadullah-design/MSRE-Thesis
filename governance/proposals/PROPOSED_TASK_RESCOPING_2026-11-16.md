@@ -1,3 +1,5 @@
+> **ARCHIVED DRAFT / STUDENT-APPROVED 16 NOV 2026.** Statements below saying 'proposed' or 'not approved' describe the file's historical state prior to user approval. Current authoritative instructions: [Working Scope](https://github.com/qasjadullah-design/MSRE-Thesis/blob/main/governance/APPROVED_WORKING_SCOPE_2026-11-16.md), [Model Design v0.2](https://github.com/qasjadullah-design/MSRE-Thesis/blob/main/docs/MODEL_DESIGN.md), and [Chapter Outline](https://github.com/qasjadullah-design/MSRE-Thesis/blob/main/writing/CHAPTER_OUTLINE.md). Supervisor/university signoff remains unverified.
+
 # Proposed agent task re-scoping — NOT APPROVED
 Source: [Claude §8 scope-refocus proposal](https://github.com/qasjadullah-design/MSRE-Thesis/blob/proposal/scope-refocus-2026-11-16/governance/proposals/SCOPE_REFOCUS_2026-11-16.md). Date: 16 November 2026.
 These are internal scope and target proposals, **not** changes to the official TH-1 title, three objectives or six milestone dates. Existing GitHub issue bodies retain their previous scope for audit.
