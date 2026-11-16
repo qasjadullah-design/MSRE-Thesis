@@ -27,7 +27,7 @@ env:
   # Not named PYPSA_*: PyPSA reads every PYPSA_* environment variable as one of its options.
   UPSTREAM_REF: 04a0edd220b1d331715c269a4eab68344c07a088 # v1.0.0
   CONFIG: ${{ github.workspace }}/thesis/configs/pypsa-usa/config.pjm_smoke.yaml
-  SOLVED: results/pjm_smoke/eastern/networks/elec_s50_c22_ec_lv1.0_1h_E.nc
+  SOLVED: results/pjm_smoke/eastern/networks/elec_s75_c22_ec_lv1.0_1h_E.nc
 
 defaults:
   run:
