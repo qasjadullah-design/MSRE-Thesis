@@ -35,10 +35,27 @@ def newest(folder: Path, pattern: str, count: int) -> list[Path]:
     return sorted(files, key=lambda p: p.stat().st_mtime, reverse=True)[:count]
 
 
+def last_traceback(path: Path) -> str | None:
+    """Return the text from the last Python traceback in a console capture, if any."""
+    text = path.read_text(encoding="utf-8", errors="replace")
+    start = text.rfind("Traceback (most recent call last)")
+    if start < 0:
+        return None
+    block = text[start:]
+    end = block.find("\n[", 1)  # snakemake's next "[timestamp]" line ends the script's stderr
+    block = block[:end] if end > 0 else block
+    return block[-MAX_CHARS:].rstrip()
+
+
 def main() -> int:
     workflow = Path(sys.argv[1])
+    consoles = [Path(arg) for arg in sys.argv[2:] if Path(arg).is_file()]
+    for path in consoles:
+        trace = last_traceback(path)
+        if trace:
+            print(f"::error title={escape('traceback in ' + path.name, is_property=True)}::{escape(trace)}")
     targets = newest(workflow / ".snakemake" / "log", "*.log", 1) + newest(workflow / "logs", "*.log", RULE_LOGS)
-    if not targets:
+    if not targets and not consoles:
         print("::error title=ci_annotate_logs::no log files found")
         return 0
     for path in targets:

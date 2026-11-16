@@ -71,16 +71,16 @@ jobs:
 
       - name: Build the PJM data model (no solver)
         working-directory: pypsa-usa/workflow
-        run: uv run snakemake data_model -j4 --scheduler greedy --configfile "$CONFIG"
+        run: uv run snakemake data_model -j4 --scheduler greedy --configfile "$CONFIG" 2>&1 | tee "$RUNNER_TEMP/console_build.log"
 
       - name: Solve with HiGHS
         working-directory: pypsa-usa/workflow
-        run: uv run snakemake "$SOLVED" -j4 --scheduler greedy --configfile "$CONFIG"
+        run: uv run snakemake "$SOLVED" -j4 --scheduler greedy --configfile "$CONFIG" 2>&1 | tee "$RUNNER_TEMP/console_solve.log"
 
       - name: Report log tails as annotations on failure
         if: failure()
         working-directory: pypsa-usa
-        run: python3 "$GITHUB_WORKSPACE/thesis/tools/ci_annotate_logs.py" workflow
+        run: python3 "$GITHUB_WORKSPACE/thesis/tools/ci_annotate_logs.py" workflow "$RUNNER_TEMP/console_solve.log" "$RUNNER_TEMP/console_build.log"
 
       - name: Summarise the networks
         if: always()
