@@ -58,6 +58,22 @@ jobs:
       - name: Install uv
         uses: astral-sh/setup-uv@v5
 
+      # Upstream's cluster-count step solves a small quadratic program with Pyomo.
+      # With HiGHS configured it calls the `ipopt` executable, which the uv
+      # environment does not provide (upstream's conda environment does).
+      - name: Install the Ipopt executable
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq coinor-ipopt || true
+          if ! command -v ipopt >/dev/null; then
+            curl -Ls https://micro.mamba.pm/api/micromamba/linux-64/latest | tar -xj -C "$RUNNER_TEMP" bin/micromamba
+            "$RUNNER_TEMP/bin/micromamba" create -y -q -p "$RUNNER_TEMP/ipopt" -c conda-forge ipopt
+            echo "$RUNNER_TEMP/ipopt/bin" >> "$GITHUB_PATH"
+            export PATH="$RUNNER_TEMP/ipopt/bin:$PATH"
+          fi
+          command -v ipopt
+          ipopt --version
+
       - name: Install the locked PyPSA-USA environment
         working-directory: pypsa-usa
         run: |
