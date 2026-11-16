@@ -1,0 +1,69 @@
+# Unit tests of this repository's own model code (src/dcaccess) on synthetic data.
+# "pinned" uses the versions locked by PyPSA-USA v1.0.0, so the code is known to
+# run inside that environment. "current" uses the newest releases.
+
+name: Tests
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "src/**"
+      - "tests/**"
+      - "pyproject.toml"
+      - "constraints/**"
+      - ".github/workflows/tests.yml"
+  push:
+    branches:
+      - main
+      - "th-*"
+    paths:
+      - "src/**"
+      - "tests/**"
+      - "pyproject.toml"
+      - "constraints/**"
+      - ".github/workflows/tests.yml"
+
+permissions:
+  contents: read
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  pytest:
+    name: pytest (${{ matrix.label }})
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - label: pinned to PyPSA-USA v1.0.0
+            python: "3.11"
+            constraints: "-c constraints/pypsa-usa-v1.0.0.txt"
+          - label: current releases
+            python: "3.12"
+            constraints: ""
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+      - name: Install
+        run: |
+          uv venv --python ${{ matrix.python }} .venv
+          uv pip install --python .venv/bin/python -e ".[test]" ${{ matrix.constraints }}
+          .venv/bin/python -c "import sys, pypsa, linopy, highspy, pandas, numpy; print('python', sys.version.split()[0], '| pypsa', pypsa.__version__, '| linopy', linopy.__version__, '| pandas', pandas.__version__, '| numpy', numpy.__version__)"
+      - name: Run tests
+        run: |
+          set -o pipefail
+          .venv/bin/python -m pytest -v 2>&1 | tee "$RUNNER_TEMP/pytest.log"
+      - name: Run the demonstration
+        run: .venv/bin/python -m dcaccess 2>&1 | tee "$RUNNER_TEMP/demo.log"
+      - name: Publish results as notices
+        if: always()
+        run: |
+          # Job logs need a signed-in account; notices are readable from the public API.
+          .venv/bin/python -c "import sys, pypsa, linopy; print('python', sys.version.split()[0], 'pypsa', pypsa.__version__, 'linopy', linopy.__version__)" > "$RUNNER_TEMP/versions.log" || true
+          tail -n 45 "$RUNNER_TEMP/pytest.log" > "$RUNNER_TEMP/pytest_tail.log" || true
+          python3 tools/ci_annotate_logs.py --notice "tests ${{ matrix.label }}" "$RUNNER_TEMP/versions.log" "$RUNNER_TEMP/pytest_tail.log" "$RUNNER_TEMP/demo.log"

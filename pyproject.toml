@@ -1,0 +1,31 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "dcaccess"
+version = "0.1.0"
+description = "Contract-access site model for data-centre loads in PyPSA networks (thesis research code)"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "pypsa>=1.3,<2",
+    "linopy>=0.9",
+    "highspy>=1.9",
+    "pandas",
+    "numpy",
+]
+
+[project.optional-dependencies]
+test = ["pytest>=8"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+filterwarnings = ["ignore::FutureWarning", "ignore::DeprecationWarning"]
+
+[tool.ruff]
+line-length = 120
