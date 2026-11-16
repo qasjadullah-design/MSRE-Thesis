@@ -1,55 +1,85 @@
-# PyPSA-USA contract-access module — proposed design v0.1
-Status: DESIGN ONLY. No validated model, observed parameters or numerical outcomes are claimed.
+# PyPSA-USA priority-service model — working design v0.2
+**Status: STUDENT-APPROVED WORKING RESEARCH DESIGN (16 November 2026).** Supervisor/university endorsement of the narrowed interpretation of Objectives 2 and 3 remains **unverified**. This supersedes v0.1 as the active implementation brief; [original Claude proposal](https://github.com/qasjadullah-design/MSRE-Thesis/blob/proposal/scope-refocus-2026-11-16/governance/proposals/SCOPE_REFOCUS_2026-11-16.md) remains archived. Do not change submitted TH-1 title, three verbatim objectives, or six working milestone dates. Code, calibration and results are not yet validated.
 
-## Goal and distinction
-Reuse an existing U.S. grid modeling framework, not recreate PJM from scratch. Research novelty is mapping legally meaningful firm CDS, nonfirm CDS and interim NITS access into explicit network-connected variables/constraints; calibrating physical flexibility; and allocating costs to incumbent consumers. Verify effective tariff versions before interpreting terms as enforceable.
+## One research question and headline
+For **1 GW of incremental data-center demand** in a **PJM-relevant zonal** system, how much incremental **system cost** is avoided when the load accepts interruptible versus firm grid service, and how is remaining cost assigned to the new data center versus incumbent customers?
 
-## Architecture
-- Audit, version-pin and reproduce upstream PyPSA-USA. Existing eastern U.S. capabilities do not automatically imply a calibrated PJM testbed.
-- Site as grid bus -> constrained point-of-interconnection/contract service -> internal site bus -> data-center demand and optional onsite generation/storage/exports. Account gross MW and net grid MW separately.
-- Use independently tested modular Linopy/PyPSA constraints with controlled hooks instead of rewriting upstream files.
-- 3–5 bus synthetic network first, then PJM-relevant regional baseline. Use 24–72 hour chronological snapshots in first tests; evaluate full-year practicality later.
+Deliver a **curtailment–cost frontier**, and a **hypothetical priority-service menu** connecting curtailment allowances and economically defensible *upper bounds* for a discount. This is NOT an adopted PJM tariff or an approved price. Retain distinct contract rights, capacity/planning treatment and curtailment priority independent of epsilon.
 
-## Draft variables / energy balances
-D_i,t baseline facility electrical load MW; C_i,t nonrecoverable curtailment; X_i,t workload shift-out; Y_i,t make-up work; L_i,t served electrical load.
-L_i,t = D_i,t - C_i,t - X_i,t + Y_i,t >= 0.
-Pgrid_i,t + Ponsite_i,t + Pdischarge_i,t = L_i,t + Pcharge_i,t + Pexport_i,t + electrical losses.
-0 <= Pfirm_i,t <= FirmCapacity_i; 0 <= Pnonfirm_i,t <= NonFirmReservation_i,t; also <= approved availability/curtailment event bound. Pgrid=Pfirm+Pnonfirm+any properly defined interim stream with no double counting. Combined gross imports <= POI physical import capability.
-Interim NITS operates under interim service terms prior to a specified upgrade; post-upgrade scenario has relevant full NITS and network upgrades, not automatically firm CDS.
-0 <= C_i,t <= alpha_i,t*D_i,t with empirically justified alpha (or explicitly hypothetical). Energy-shift backlogs need recovery/deadline and power limits. Curtailment priority must reflect actual dated rules or a labeled hypothetical policy; don't assign arbitrary penalty ranking as if law.
+## Exact TH-1 objectives (unchanged)
+1. Develop an open-source PyPSA-USA module for firm, non-firm, and interim non-firm data-center grid-access contracts.
+2. Calibrate data-center flexibility using observed behavior from FERC/PJM and Texas SB6 filings.
+3. Quantify system cost, reliability, emissions, and incumbent ratepayer cost per GW of new load under each contract design.
 
-## Optimization and accounting
-Operational objective: physical generation/storage costs plus attributable flexibility/curtailment disutility, investment where modeled, and distinct involuntary unserved firm-demand penalty. Avoid re-adding costs already in PyPSA.
-After solve, account incremental recoverable revenue requirement, developer payments, credits and residual incumbent allocation. Report $/GW and exact time horizon (annual vs net present value). Dispatch cost is NOT the ratepayer's bill.
+## Regulatory framing — approved by student for modeling, subject to source-status verification
+Core test case addresses **FERC/PJM co-located loads and qualifying behind-the-meter-generation (BTMG)** service arrangements, NOT arbitrary ordinary grid-connected large loads. Include a generator in the core physical topology. Separate **installed generation** from **actual onsite generation**. Generator dispatch at zero during an outage is a valid core case. A model with **no installed generator** is an explicitly hypothetical engineering comparison and does not establish legal eligibility for FCD/NFCD or Interim NITS. Consult [S1 source memo](../regulatory/PROPOSED_S1_COLOCATION_FRAMING_2026-11-16.md) (now student-accepted framing; historically named PROPOSED), FERC December 2025 and June 2026 orders; latest filed/effective PJM tariff provisions remain TH-002 verification tasks.
+- Firm Contract Demand (FCD): physical withdrawals bounded by reserved firm MW; planning treatment and protection based on verified service rules.
+- Non-Firm Contract Demand (NFCD): withdrawals limited by reserved MW and available capacity/qualifying curtailment events; not simply an exogenously given shed percentage. Scarcity order and adequacy treatment need primary-tariff evidence.
+- Interim NITS: **two static cases**, before upgrades (interim non-firm treatment) and after upgrades (**full NITS**, NOT automatic FCD). Report value/cost of interim bridge.
+- Do not tie reserved FCD/NFCD MW automatically to co-located generator capacity or gross load. Keep three quantities separate.
 
-## Scenario framework (pending approval)
-B0 no data center; B1 conventional 1 GW fully firm access; C1 firm CDS, C2 nonfirm CDS, C3 interim NITS; same physical site and grid context. Primary scale 1 GW with 0.1/0.5/2 GW sensitivity, dispersed vs concentrated sites, physical flexibility none/low/evidence based, grid congestion, onsite outages, pre/post upgrade. Clearly distinguish hypothetical parameter sets and observed calibration.
+## Minimum physical model
+A single **grid bus → point-of-interconnection (POI) link → site bus**, plus gross site demand `D[t]`, one co-located generator of installed fixed MW `G` (fuel, efficiency, operating cost, emissions), and an explicit `C[t]` curtailed physical computing load (MW; lost-computing disutility). Keep physical POI capacity and contractual entitlements independent.
 
-## Metrics
-Incremental annual/period operating and infrastructure cost, non-firm contractual curtailment vs involuntary firm unserved MWh, peak MW, congestion and stress indicators, emissions including onsite/backup (tCO2), network/generation investment, net attributed incumbent ratepayer cost per GW.
-A dispatch model doesn't prove N-1 security or probabilistic adequacy without separate formal methods.
+Core site balance (units MW):
+`grid_import[t] + onsite_gen[t] = served_site_load[t]`,
+`served_site_load[t] = D[t] - C[t]`,
+`0 <= onsite_gen[t] <= G * availability[t]`,
+`0 <= grid_import[t] <= POI_capacity`,
+`0 <= C[t] <= alpha[t] * D[t]`.
+Model relevant parasitic loads only if explicitly included in D. Use a constant demand or ONE declared demand profile. No batteries, exports, electrical-loss detail, workload migration, dynamic recovery/backlog or unit commitment in the core model.
 
-## Test acceptance
-1. Zero-load base matches upstream baseline, within solver tolerance.
-2. Never exceed contract-specific or physical POI import capacities.
-3. Site nodal energy balance holds.
-4. Zero actual flexibility cannot shed computing load by merely exercising a legal grid-disconnection right.
-5. Shifting recovers within permitted window.
-6. Nonfirm interruption obeys verified trigger/service order.
-7. Interim-to-full NITS transition changes rules and network correctly.
-8. Cases with no onsite generation, onsite failure, constrained transmission and infeasibility produce explainable behavior.
-9. Reconcile emissions and cost components without double counting.
-10. Record reproducible run commands, snapshots, solver, data vintage and source provenance.
+**Separation of controls:** `alpha` is *physical* interruptible share; `epsilon` is a service-policy annual energy curtailment tolerance. An energy tolerance alone cannot create an actual contract or justify ignoring site energy balance.
 
-## Stage 1 delivery from Claude
-Inspect upstream and actual PJM build feasibility; provide reproducible configuration, exact commit/environment, proposed Linopy constraints and regulatory question list. Then implement smallest firm-only synthetic proof of concept on a feature branch and submit code/tests/PR for review. Do not implement entire project at once.
+## Contract module and capacity adequacy
+Use modular PyPSA/Linopy components and test contracts on 3–5 synthetic buses before integrating regional PyPSA-USA.
+- Record `firm_reserved_mw`, `nonfirm_reserved_mw`, tariff status, physical POI MW, interconnection category, eligibility, outage/availability and priority policy in validated input schema.
+- Model `0 <= P_firm[t] <= F`; `0 <= P_nonfirm[t] <= min(R_NF[t], availability_NF[t])` with applicable event restriction; both part of physical gross grid imports and POI cap, and no simultaneous double-counting.
+- In forward-year expansion, model the *distinct firm resource-adequacy obligation* using existing PyPSA-USA reserve-margin formulation where viable; any simplified fallback capacity addition must be identified as a **proxy**, not a verified PJM planning rule.
+- Model disconnection order with explicit event rules or validated priority penalty/lexicographic optimization; any ranking is a modeling assumption pending tariff verification. Never silently classify curtailed NF demand as involuntary unserved firm energy.
+- If shortage requires firm shedding, distinguish it as a separate variable with very high penalty and measurable MWh.
 
-## Source starting points
-- https://github.com/PyPSA/pypsa-usa
-- https://pypsa-usa.readthedocs.io/
-- https://docs.pypsa.org/latest/user-guide/optimization/custom-constraints/
-- https://www.ferc.gov/
-- https://www.pjm.com/
-- https://capitol.texas.gov/tlodocs/89R/billtext/html/SB00006F.htm
+## Annual curtailment tolerance sweep
+Proposed **epsilon (%) = {0, 0.25, 0.5, 1, 2, 5}** for one principal zone, 1 GW case. Distinguish an upper bound on annually *permissible contract interruption* from what physical flexibility can deliver. Add an explicit annual energy constraint such as `sum_t(C_contract[t] * weight[t]) <= epsilon/100 * sum_t(D[t] * weight[t])` only if this interpretation is made clear. Do not force infeasible service to pass by adding free shedding.
 
-All regulatory provisions require docket/order/effective-status checks prior to final parameterization.
+Define from consistently annualized optimized physical-system cost:
+- `DeltaC_k = C_system_with_load_k - C_system_no_new_load`.
+- `V(epsilon) = DeltaC_firm - DeltaC_NF(epsilon)` comparing **separate firm and nonfirm legal/technical service cases** (do not pretend epsilon=0 equals FCD automatically).
+- Net social benefit: subtract separately measured site disutility **only if not already included** in C_system. Explicitly report social-resource cost boundary vs payments/transfers.
+- Discount menu values are **indicative avoided-resource-cost bounds**; pricing feasibility also depends on developer willingness, incidence, tariffs and credible delivered interruptions.
+
+## Scenario limit (prevent combinatorial explosion)
+At most **30 regional full-year solves**, using **2030 forward planning horizon** if upstream support and data permit.
+1. Base case B0 no new load.
+2. Firm benchmark, and NF epsilon sweep for ONE representative PJM-ReEDS zone at 1 GW.
+3. Three selected PJM zones based on documented load forecast data: compare firm plus one or two approved nonfirm epsilons per zone.
+4. Size: primary 1 GW; ~10 GW **aggregate regional-scale** sensitivity, not a single campus or single 10 GW POI.
+5. Flexibility: none, low, evidence-bounded upper case; labels must show measured/derived/assumed. No invented physical response data.
+6. Interim bridge: two separately configured pre/post-upgrade static network and service runs.
+7. Annual investment/expansion followed by dispatch. If runtime infeasible, use a documented representative-week or 3-hour time resolution sensitivity, without claiming a full-hourly-year result.
+
+No explicit transmission-line contingency, storage, export, day-ahead market clearing, sub-hour transient model, Pakistan network or comprehensive financial tariff model in core scope.
+
+## Calibration: three evidence grades and data provenance
+`TH-005` must extract physically curtailable fraction (MW/%), feasible duration (h), response/ramp and value/cost of lost computing (USD/unit) where credible. Every candidate value: source/DOI/docket/section, jurisdiction/technology, measurement boundary, sample size, observed full-site delivered MW vs computing-trace + modeled power vs derived vs hypothesis, uncertainty and applicability to PJM. Legislation such as Texas SB6 is a regulatory requirement, not actual data-center delivered-response measurement. If empirical evidence fails, report limits and obtain supervisor guidance on TH-1 Objective 2—do not relabel assumptions as observed.
+
+## Metrics and economic allocation
+PRIMARY: annualized system cost (capital additions + operating cost) as USD/GW-year, MWh/hours contractual curtailment, MWh **involuntary firm unserved energy**. SECONDARY: grid + onsite tCO2/GW-year and two **illustrative** incumbent allocations.
+- Rule A (socialized): assign a clearly defined share of incremental **recoverable** cost across incumbent and new loads, with an explicit load denominator and separate new-load contributions.
+- Rule B (cost causation): assign attributable incremental capacity/intertie investment to data center, with justified residual to incumbents. Define every ledger item.
+- Reconcile `incremental recoverable costs = DC contribution + incumbent allocation + other sources/credits`. Physical cost, tariff collections and zonal price transfers are **not identical**. Price change × existing load is a separate transfer estimate; never add to physical resource costs or claim a simulated actual utility bill.
+
+Reliability: report contractual curtailed MWh separately from involuntary firm unserved MWh for a **deterministic** scenario year. Do not claim LOLP/LOLE, N-1 security or site-level power-flow feasibility from zonal expansion results.
+
+## Validation / release gates
+- TH-003 upstream PyPSA-USA commit/environment, PJM ReEDS 22-zone approximation, data/footprint gaps and Linux execution blocked/confirmed with logs.
+- TH-004 toy site balance, FCD import bound, generator capacity/outage, zero actual flexibility, physical curtailment and solver tests; pinned upstream environment compatibility.
+- TH-006 NF service & intermittent/interim treatment, event priority, annual epsilon cap, generator-site MW conservation, static post-upgrade NITS transition.
+- TH-008 zonal regional network reproducibility, carefully limited **one-week 2023** back-cast, boundary and validation checks. 2023 is student-approved *working choice*, not yet a successful back-cast.
+- TH-009 core regional scenario matrix, run count, results and logs with allocation reconciliation. All runs in reproducible scripts.
+- Findings and published curves must identify what was actually run vs design-only material.
+
+## Dates / source authority
+Current user-approved working milestones: literature **31 Dec 2026**; data **31 Jan 2027**; analysis **15 Mar 2027**; model deployment **31 May 2027**; result evaluation **30 Jun 2027**; thesis and article **31 Jul 2027**. Existing filed TH-1 text for M4 was 30 May: formal amendment unverified; don't silently claim university acceptance. Supervisor's endorsement of simplified proxies and scoped language must be sought before asserting objective completion.
+
+Sources: [FERC Dec 2025 order](https://www.ferc.gov/sites/default/files/2025-12/E-1%20EL25-49-000.pdf), [FERC Jun 2026 order](https://www.ferc.gov/sites/default/files/2026-06/EL25-49-002_0.pdf), [PJM Feb 2026 planning slides](https://www.pjm.com/-/media/DotCom/committees-groups/workshops/cllsco/2026/20260210/20260210-item-01---3-co-located-load-planning-study-considerations-for-reference-purposes.pdf); `regulatory/PROPOSED_S1_COLOCATION_FRAMING_2026-11-16.md` (historical filename, student accepted). Latest effective tariff conditions remain TH-002 unknowns.
