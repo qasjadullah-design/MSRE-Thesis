@@ -15,3 +15,12 @@ Pin PyPSA-USA upstream commit and environment. Do not claim an existing validate
 Repository is PUBLIC: no university identification numbers, signed TH-1, private emails, secrets, licensed full-text PDFs or restricted datasets. Private originals remain in Drive.
 
 One owner per task/branch. Changes via feature branches and PRs, with independent review prior to merge. No silent upstream rewrites. Handoff must list issue, branch/commit, files, sources, tests (actually executed), assumptions, blockers, and next action. Never claim work complete without an artifact.
+
+## Adopted working scope (student approved 16 Nov 2026)
+Read `docs/MODEL_DESIGN.md` **v0.2**, `governance/DECISIONS.md` and `writing/CHAPTER_OUTLINE.md` as the active methodology. Archived scope proposals and v0.1 are historical. Three TH-1 objectives and six working deadlines are fixed.
+- Central question: incremental system avoided cost for interruptible vs firm 1 GW new data-center load; allocate residual costs via two clearly illustrative bookends.
+- 2030 zonal PJM-relevant case, forward-year capacity expansion then dispatch; three zones, <=30 regional full-year solves, 2023 one-week backcast if executable.
+- Core FERC co-located / qualifying BTMG model includes physical onsite generator. G_installed=0 is NOT assumed tariff-eligible. Interim upgrade transition is to full NITS, not automatic FCD.
+- Legal firm service is NOT equivalent to epsilon=0 permitted annual curtailment. Contracts require separate rights/planning/priority parameters. No made-up tariff discount.
+- Actual field-metered demand flexibility and computing-trace-modeled capability must stay distinct; no assertion that evidence-bounded ranges fully satisfy formal Objective 2 without supervisor agreement.
+- Approved working design is **not** university/supervisor proof of scope acceptance or proof of successful simulation. No new full-scale development without adequate validation and PR review.
