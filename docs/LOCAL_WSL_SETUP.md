@@ -2,7 +2,7 @@
 
 - **Purpose:** a complete record of how the pinned PyPSA-USA v1.0.0 environment was made to work on the project's Windows 11 workstation, so that any person or agent can repeat or repair it without earlier conversations.
 - **Date of setup:** 16 November 2026. **Author:** Claude Code.
-- **Status:** environment installed and importing. One-day PJM smoke run: see section 6.
+- **Status:** environment installed, and the one-day PJM smoke run **builds and solves to Optimal on this machine** (16 November 2026, section 6). It is the same feasibility test as on GitHub, not a validated PJM model.
 - **Scripts:** `tools/local_wsl/setup.sh` and `tools/local_wsl/run_smoke.sh`.
 
 ## 1. Why WSL is needed
@@ -89,12 +89,29 @@ It runs the dry run, builds the 22-zone PJM data model, solves one day with HiGH
 
 **If a run is interrupted** (internet drops, the PC sleeps or is shut down): nothing needs to be cleaned up. Run the same command again. Snakemake skips every finished step, and `--rerun-incomplete` makes it redo any step that was cut off part-way, including a half-downloaded file.
 
-**Result on this machine: not yet recorded.** On 16 November 2026 the dry run passed and listed 26 jobs. The first full attempt failed after three seconds on problem 4 above. A second attempt was started after the fix and was still running when this was written. This section is to be replaced by the outcome: status, run time, peak memory.
+### Result on this machine (16 November 2026)
+
+| Item | Value |
+|---|---|
+| Thesis repo / upstream | `f227b9f` / `04a0edd` (v1.0.0) |
+| Outcome | data model built, one day solved, **HiGHS "Model status: Optimal"** |
+| Objective | 1.8735238492 × 10⁹, identical to GitHub run 43819895193 |
+| Network | 22 buses, 84 links, 545 generators, 39 storage units, 22 loads, 24 snapshots: identical to the GitHub run |
+| Time | build 19 min 19 s for the last 18 of 26 steps, most of it downloads; solve step 8 s (HiGHS 0.7 s) |
+| Peak memory of any rule | 1.84 GB (`cluster_resources`); `build_powerplants` 1.70 GB; renewable profiles 1.65 GB |
+| Disk | 7.6 GB of data in `workflow/data`, 4.7 GB for everything else under `~/thesis` |
+| Parallel jobs | 2 |
+
+The numbers in the solved network are artefacts of a one-day problem with expansion allowed, exactly as on GitHub (`docs/PJM_BASELINE_FEASIBILITY.md` section 6.4). They are not a PJM result.
+
+How the run went, for the record: the dry run passed (26 jobs). Attempt 1 failed after three seconds on problem 4 of section 5. Attempt 2 reached step 8 and then stalled for hours: the internet connection dropped while `USATestSystem.zip` was downloading, and that download has no timeout, so it waited on a dead connection. It was stopped by hand. Attempt 3 stopped in the dry run with `IncompleteFilesException`, because the script passed `--rerun-incomplete` only to the real steps; fixed in `f227b9f`. Attempt 4 completed.
+
+**If a download stalls** (no progress in the console log and the file size not growing): stop the run with `pkill -INT -f bin/snakemake` and run the script again.
 
 ## 7. Limits
 
-- **Memory.** Linux sees about 7.4 GB. GitHub's runner, where the same test passed, has 16 GB. If a rule is killed for lack of memory, the limit can be raised with a `.wslconfig` file in the Windows user profile (`[wsl2]`, `memory=12GB`, `swap=8GB`), followed by `wsl --shutdown`. That restarts Ubuntu, so ask the owner first.
-- **Full-year runs.** A full-year 22-zone expansion is not expected to fit on this laptop. Decision D13 (execution environment for full-year runs) stays open.
+- **Memory.** Linux sees about 7.4 GB. The one-day test peaks at 1.84 GB per rule, so it fits with room to spare at two parallel jobs. Longer horizons will need more: the solve grows with the number of snapshots. If a rule is killed for lack of memory, the limit can be raised with a `.wslconfig` file in the Windows user profile (`[wsl2]`, `memory=12GB`, `swap=8GB`), followed by `wsl --shutdown`. That restarts Ubuntu, so ask the owner first.
+- **Full-year runs.** Whether a full-year 22-zone expansion fits on this laptop has not been tested. Decision D13 (execution environment for full-year runs) stays open until a one-week run has been profiled here.
 - **Disk.** The Linux virtual disk lives on drive C:, which had about 55 GB free. One year of ERA5 weather data for a back-cast is 5 to 9 GB.
 - **Network.** Plain HTTP is blocked on the network used on 16 November. Any future step that downloads over `http://` will fail the same way; prefer `https://` sources.
 - **Keep the PC awake** during a run. WSL stops when Windows sleeps.
