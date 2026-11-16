@@ -83,6 +83,8 @@ Machine: Windows 11 Pro, 16 cores, 15 GB RAM, no WSL, no Docker, no conda. `uv` 
 
 The policy was left untouched; changing it is the machine owner's decision. Plain PyPSA does run on this machine in a separate Python 3.12 environment (PyPSA 1.4.0), which is enough for the synthetic-network work of TH-004.
 
+Since this was written the owner installed WSL 2 with Ubuntu 24.04, and the smoke run of section 6 also passes there. See `docs/LOCAL_WSL_SETUP.md`.
+
 ## 6. Linux smoke run
 
 ### 6.1 How to reproduce
@@ -169,7 +171,7 @@ The student-approved working scope (`governance/APPROVED_WORKING_SCOPE_2026-11-1
 
 | # | Risk | Severity | Mitigation |
 |---|---|---|---|
-| R1 | No execution environment on the workstation | High for full-year runs | GitHub Actions covers one-day and one-week tests. Full-year runs need WSL2, a cloud VM or university HPC (decision D13) |
+| R1 | Execution environment for full-year runs | Medium | The one-day test runs on GitHub Actions and, since 16 Nov 2026, on the workstation under WSL 2 (7.4 GB RAM for Linux). Longer horizons are unprofiled; full-year runs may need a cloud VM or university HPC (decision D13) |
 | R2 | `trans_reg: ['PJM']` filter untested upstream | **Closed**: it works (section 4) | |
 | R3 | ReEDS PJM region omits IN, NC, TN territory (about 6% of capacity) and cuts all external ties | Medium | Quantify from PyPSA-USA's plant table; consider adding Indiana zones; decide on imports and exports |
 | R4 | Zonal transfer limits, not nodal: congestion at a specific site cannot be represented | High for site-level claims | Accepted in the plan (decision D17): no site-level claims |
