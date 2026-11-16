@@ -87,6 +87,8 @@ bash ~/thesis/MSRE-Thesis/tools/local_wsl/run_smoke.sh
 
 It runs the dry run, builds the 22-zone PJM data model, solves one day with HiGHS and prints a network summary, the end of the solver log, and peak memory per rule. Console output of the two long steps goes to `~/thesis/smoke_build_console.log` and `~/thesis/smoke_solve_console.log`. Downloaded data is kept in `~/thesis/pypsa-usa/workflow/data`, so a rerun continues where the last one stopped.
 
+**If a run is interrupted** (internet drops, the PC sleeps or is shut down): nothing needs to be cleaned up. Run the same command again. Snakemake skips every finished step, and `--rerun-incomplete` makes it redo any step that was cut off part-way, including a half-downloaded file.
+
 **Result on this machine: not yet recorded.** On 16 November 2026 the dry run passed and listed 26 jobs. The first full attempt failed after three seconds on problem 4 above. A second attempt was started after the fix and was still running when this was written. This section is to be replaced by the outcome: status, run time, peak memory.
 
 ## 7. Limits

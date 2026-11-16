@@ -24,7 +24,7 @@ uv run snakemake "$SOLVED" -n -j"$JOBS" --scheduler greedy --configfile "$CONFIG
 [ "${PIPESTATUS[0]}" -eq 0 ] || { echo "DRY RUN FAILED"; exit 1; }
 
 echo "[$(stamp)] build data model"
-uv run snakemake data_model -j"$JOBS" --scheduler greedy --configfile "$CONFIG" > "$ROOT/smoke_build_console.log" 2>&1
+uv run snakemake data_model -j"$JOBS" --scheduler greedy --rerun-incomplete --configfile "$CONFIG" > "$ROOT/smoke_build_console.log" 2>&1
 rc=$?
 echo "[$(stamp)] build exit code $rc"
 if [ $rc -ne 0 ]; then
@@ -34,7 +34,7 @@ if [ $rc -ne 0 ]; then
 fi
 
 echo "[$(stamp)] solve"
-uv run snakemake "$SOLVED" -j"$JOBS" --scheduler greedy --configfile "$CONFIG" > "$ROOT/smoke_solve_console.log" 2>&1
+uv run snakemake "$SOLVED" -j"$JOBS" --scheduler greedy --rerun-incomplete --configfile "$CONFIG" > "$ROOT/smoke_solve_console.log" 2>&1
 rc=$?
 echo "[$(stamp)] solve exit code $rc"
 if [ $rc -ne 0 ]; then
