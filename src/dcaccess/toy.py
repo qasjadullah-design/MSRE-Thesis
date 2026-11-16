@@ -70,7 +70,8 @@ def build_toy_network(
     """
     n = pypsa.Network()
     n.set_snapshots(pd.date_range("2030-01-01", periods=hours, freq="h"))
-    n.snapshot_weightings.loc[:, :] = HOURS_PER_YEAR / hours
+    # Assign a float Series: newer pandas refuses to write floats into the default integer columns.
+    n.snapshot_weightings = pd.Series(HOURS_PER_YEAR / hours, index=n.snapshots)
 
     for carrier, co2 in CARRIERS.items():
         n.add("Carrier", carrier, co2_emissions=co2)
