@@ -47,7 +47,28 @@ def last_traceback(path: Path) -> str | None:
     return block[-MAX_CHARS:].rstrip()
 
 
+def publish_notices(title: str, paths: list[Path], max_notices: int = 9) -> int:
+    """Publish whole files (in chunks) as notice annotations, e.g. the run summary."""
+    text = "\n\n".join(p.read_text(encoding="utf-8", errors="replace").rstrip() for p in paths if p.is_file())
+    if not text:
+        print(f"::notice title={escape(title, is_property=True)}::(nothing to report)")
+        return 0
+    lines, chunks, current = text.splitlines(), [], ""
+    for line in lines:
+        if current and len(current) + len(line) + 1 > MAX_CHARS:
+            chunks.append(current)
+            current = ""
+        current += line[:MAX_CHARS] + "\n"
+    chunks.append(current)
+    for number, chunk in enumerate(chunks[:max_notices], start=1):
+        label = escape(f"{title} ({number}/{min(len(chunks), max_notices)})", is_property=True)
+        print(f"::notice title={label}::{escape(chunk.rstrip())}")
+    return 0
+
+
 def main() -> int:
+    if sys.argv[1] == "--notice":
+        return publish_notices(sys.argv[2], [Path(arg) for arg in sys.argv[3:]])
     workflow = Path(sys.argv[1])
     consoles = [Path(arg) for arg in sys.argv[2:] if Path(arg).is_file()]
     for path in consoles:

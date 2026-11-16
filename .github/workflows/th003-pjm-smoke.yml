@@ -102,7 +102,15 @@ jobs:
         if: always()
         working-directory: pypsa-usa
         run: |
-          uv run python "$GITHUB_WORKSPACE/thesis/tools/summarize_network.py" workflow >> "$GITHUB_STEP_SUMMARY" || echo "No network to summarise." >> "$GITHUB_STEP_SUMMARY"
+          uv run python "$GITHUB_WORKSPACE/thesis/tools/summarize_network.py" workflow > "$RUNNER_TEMP/summary.md" || echo "No network to summarise." >> "$RUNNER_TEMP/summary.md"
+          cat "$RUNNER_TEMP/summary.md" >> "$GITHUB_STEP_SUMMARY"
+          # Job summaries need a signed-in account; notices are readable from the public API.
+          python3 "$GITHUB_WORKSPACE/thesis/tools/ci_annotate_logs.py" --notice "network summary" "$RUNNER_TEMP/summary.md"
+          log=$(find workflow/logs -name "*solver.log" | head -n 1)
+          if [ -n "$log" ]; then
+            tail -c 3000 "$log" > "$RUNNER_TEMP/solver_tail.log"
+            python3 "$GITHUB_WORKSPACE/thesis/tools/ci_annotate_logs.py" --notice "solver log tail" "$RUNNER_TEMP/solver_tail.log"
+          fi
           df -h /
 
       - name: Upload logs and networks
