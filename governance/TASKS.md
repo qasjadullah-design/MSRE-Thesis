@@ -1,18 +1,26 @@
-# Multi-agent work plan
+# Multi-agent delivery plan — student-approved working scope, 16 November 2026
 
-Source: `governance/SCOPE.md` section 8 (working plan approved by the student on 16 November 2026). Dates are internal targets inside the six fixed milestones and change none of them. A task is complete only when its deliverable exists and has been reviewed.
+**Status:** Work allocation approved. Completion of a task means a verifiable committed artifact and passing tests where applicable, not a description or a plan. Internal targets are NOT TH-1 milestone amendments.
 
-| ID | Owner | Deliverable | Acceptance | Target | State on 16 Nov 2026 |
-|---|---|---|---|---|---|
-| TH-001 | ChatGPT | TH-1 context, repository and Drive information, agent governance | In place | done | Done |
-| TH-002 | ChatGPT | One-page table for the three service classes: docket, order date, status, withdrawal right, curtailment trigger, capacity obligation; answer to S1 | Every cell has a primary source or "not found" | 27 Nov 2026 | S1 memo drafted (draft PR #10); table open |
-| TH-003 | Claude | Smoke run of the PJM extract passing on Linux, or a specific blocker | Run link and log in the handoff | 27 Nov 2026 | Passed; report on branch `th-003-pypsa-usa-pjm-feasibility`, awaiting review |
-| TH-005 | ChatGPT | Flexibility table: curtailable share, duration, cost of lost computing, each graded observed / derived / assumed; three cases | No value labelled observed without a metered source | 18 Dec 2026 | Open |
-| TH-004 | Claude | `docs/MODEL_DESIGN.md` v0.2; toy network with firm access and tests | Tests run in CI on the pinned versions | 18 Dec 2026 | In progress on branch `th-004-firm-access-toy` |
-| Literature chapter | Student + ChatGPT | Draft of chapters 2 and 3 from 12 to 15 core sources | Draft in Drive | 31 Dec 2026 (milestone) | Open |
-| TH-007 | ChatGPT | One-page statement of allocation rules A and B with formulas and what each omits | Student approval | 15 Jan 2027 | Open |
-| TH-006 | Claude | Non-firm and interim treatments on the toy network; ε sweep working | Acceptance tests in `docs/MODEL_DESIGN.md` pass | 31 Jan 2027 | Blocked on TH-004 review |
-| TH-008 | Claude | Forward-year PJM baseline; one-week 2023 back-cast | Baseline reproducible from one command | 15 Mar 2027 | Blocked on D13 (execution environment) and an EIA API key |
-| TH-009 | Claude | Regional scenario runs of `governance/SCOPE.md` 3.5 | Result tables and run logs | 31 May 2027 (milestone) | Blocked on TH-006 and TH-008 |
+| ID | Owner | Accepted deliverable | Internal target | State |
+|---|---|---|---|---|
+| TH-001 | ChatGPT | Shared project brief/agent instructions and accepted refocus reflected across GitHub and Drive | 16 Nov 2026 | Implementation in progress |
+| TH-002 (#1) | ChatGPT | One-page primary-source 3-service contract status/withdrawal/curtailment/capacity matrix, incl. S1 | 27 Nov 2026 | Ready (S1 memo prepared; tariff matrix outstanding) |
+| TH-003 (#2) | Claude | PJM ReEDS extract Linux smoke test **passing or specific logged blocker**, upstream and environment pinned | 27 Nov 2026 | Smoke test passing ([run 43819895193](https://github.com/qasjadullah-design/MSRE-Thesis/actions/runs/43819895193), HiGHS Optimal); report and handoff on branch `th-003-pypsa-usa-pjm-feasibility`, awaiting review. No validated PJM result |
+| TH-004 (#3) | Claude | Model v0.2 implementation check, firm-contract 3–5 bus prototype and CI unit tests | 18 Dec 2026 | Firm-access prototype and 23 tests passing on the pinned versions ([run 43822507888](https://github.com/qasjadullah-design/MSRE-Thesis/actions/runs/43822507888)); on branch `th-004-firm-access-toy`, awaiting review. TH-002 tariff review still outstanding |
+| TH-005 (#4) | ChatGPT | Evidence-graded physically curtailable share, duration and computing-loss cost table; 3 cases, no invented observed values | 18 Dec 2026 | Ready |
+| LIT | Student + ChatGPT | Chapters 2–3 draft from 12–15 anchor sources + priority-service theory and source register | **31 Dec 2026** | Ready |
+| TH-007 (#5) | ChatGPT | One-page socialized and cost-causation allocation equations and reconciliation/omissions | 15 Jan 2027 | Ready |
+| [TH-006 (#12)](https://github.com/qasjadullah-design/MSRE-Thesis/issues/12) | Claude | NF + Interim NITS two-static-case toy prototype; event/ε constraints; tests | 31 Jan 2027 | Blocked on TH-004 and TH-002 |
+| [TH-008 (#13)](https://github.com/qasjadullah-design/MSRE-Thesis/issues/13) | Claude | Reproducible 2030 PJM-relevant zonal baseline and bounded one-week 2023 back-cast | 15 Mar 2027 | Blocked on TH-003 |
+| [TH-009 (#14)](https://github.com/qasjadullah-design/MSRE-Thesis/issues/14) | Claude | Limited regional scenarios, reproducible run log, cap ≤30 full-year solves | **31 May 2027** | Blocked on TH-006/008 |
+| ANALYSIS | Student + ChatGPT | Cost/curtailment frontier, emissions, reliability proxies and two bookend allocations | **30 Jun 2027** | Planned |
+| WRITING | Student + ChatGPT | Eight chapters and article integrated, verified references, results, supervisor comments | **31 Jul 2027** | Planned |
 
-Use GitHub issues as the task records and pull requests for review. TH-008 and TH-009 have no issue yet.
+**First actionable sequence:** TH-003 Linux blocker/success → TH-002 verified primary tariff terms → TH-004 toy site → TH-005 flexibility evidence; move to scale only after passing acceptance tests.
+
+**Research questions:** (Q1) contract-specific optimization, (Q2) credible physical interruption envelope and disutility, (Q3) system cost/energy reliability/emissions/incumbent allocation per GW.
+
+**Acceptance hierarchy:** Every cited regulatory rule needs source/date/status; parameters graded observed/derived/assumed; scenario outputs include solver logs; firm vs non-firm priority and physical site energy balance must hold; monetary cost allocations reconcile; use current approved working schedule with May 31 model deployment. University form previously said May 30; formal amendment pending.
+
+Source: [16 Nov scope refocus](https://github.com/qasjadullah-design/MSRE-Thesis/blob/proposal/scope-refocus-2026-11-16/governance/proposals/SCOPE_REFOCUS_2026-11-16.md), now accepted by student as working scope.

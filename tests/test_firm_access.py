@@ -1,7 +1,7 @@
 """Tests of the firm-access site model on the synthetic three-zone system.
 
 All inputs are synthetic. The tests check that the model behaves as specified
-in docs/MODEL_DESIGN.md v0.2 (acceptance tests A1 to A9); they establish no
+in docs/SITE_MODEL_IMPLEMENTATION.md (acceptance tests A1 to A9); they establish no
 research result.
 """
 

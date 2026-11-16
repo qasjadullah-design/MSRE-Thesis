@@ -163,7 +163,7 @@ For orientation only, the EIA-860 2025 fleet in the earlier local model (PJM bal
 4. **Validation mode** (`run.validation: true`): comparison plots against EIA data; also needs the EIA API key.
 5. **A decision on boundary trade** with MISO, NYISO and SERTP.
 
-The approved plan (`governance/SCOPE.md`, decisions D14 and D16) uses a forward year for the scenarios and a one-week 2023 back-cast only to check the extract.
+The student-approved working scope (`governance/APPROVED_WORKING_SCOPE_2026-11-16.md`, decisions D14 and D16) uses a 2030 forward year for the scenarios and a one-week 2023 back-cast only to check the extract.
 
 ## 8. Risks
 
@@ -188,7 +188,7 @@ The approved plan (`governance/SCOPE.md`, decisions D14 and D16) uses a forward 
 1. Review and merge this branch.
 2. Decide the execution environment for full-year runs (D13).
 3. Cache the downloaded data in the workflow so runs do not depend on external hosts each time.
-4. One-week 2023 back-cast with a fixed fleet, EIA demand and atlite weather. Needs an EIA API key stored as a repository secret. This is TH-008 in the plan.
+4. One-week 2023 back-cast with a fixed fleet, EIA demand and atlite weather. Needs an EIA API key stored as a repository secret. This is TH-008 (issue #13).
 5. Report the `assign_load_weight` defect to the PyPSA-USA maintainers, if the student agrees.
 
 ## 10. Questions for human review
@@ -208,4 +208,4 @@ The approved plan (`governance/SCOPE.md`, decisions D14 and D16) uses a forward 
 | `tools/summarize_network.py` | prints what the produced networks contain |
 | `tools/ci_annotate_logs.py` | publishes log tails and summaries as run annotations |
 | `governance/handoffs/TH-003.md` | handoff |
-| `governance/DECISIONS.md` | D12 to D14 added |
+| `governance/TASKS.md` | TH-003 state updated |
