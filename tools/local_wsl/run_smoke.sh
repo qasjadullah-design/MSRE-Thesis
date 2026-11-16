@@ -20,7 +20,7 @@ command -v ipopt || { echo "ipopt not on PATH: run tools/local_wsl/setup.sh firs
 
 # Targets go before --configfile, which accepts several values.
 echo "[$(stamp)] dry run"
-uv run snakemake "$SOLVED" -n -j"$JOBS" --scheduler greedy --configfile "$CONFIG" 2>&1 | tail -n 25
+uv run snakemake "$SOLVED" -n -j"$JOBS" --scheduler greedy --rerun-incomplete --configfile "$CONFIG" 2>&1 | tail -n 25
 [ "${PIPESTATUS[0]}" -eq 0 ] || { echo "DRY RUN FAILED"; exit 1; }
 
 echo "[$(stamp)] build data model"
