@@ -11,9 +11,9 @@
 | TH-005 (#4) | ChatGPT | Evidence-graded physically curtailable share, duration and computing-loss cost table; 3 cases, no invented observed values | 18 Dec 2026 | Ready |
 | LIT | Student + ChatGPT | Chapters 2–3 draft from 12–15 anchor sources + priority-service theory and source register | **31 Dec 2026** | Ready |
 | TH-007 (#5) | ChatGPT | One-page socialized and cost-causation allocation equations and reconciliation/omissions | 15 Jan 2027 | Ready |
-| TH-006 | Claude | NF + Interim NITS two-static-case toy prototype; event/ε constraints; tests | 31 Jan 2027 | Blocked on TH-004 and TH-002 |
-| TH-008 | Claude | Reproducible 2030 PJM-relevant zonal baseline and bounded one-week 2023 back-cast | 15 Mar 2027 | Blocked on TH-003 |
-| TH-009 | Claude | Limited regional scenarios, reproducible run log, cap ≤30 full-year solves | **31 May 2027** | Blocked on TH-006/008 |
+| [TH-006 (#12)](https://github.com/qasjadullah-design/MSRE-Thesis/issues/12) | Claude | NF + Interim NITS two-static-case toy prototype; event/ε constraints; tests | 31 Jan 2027 | Blocked on TH-004 and TH-002 |
+| [TH-008 (#13)](https://github.com/qasjadullah-design/MSRE-Thesis/issues/13) | Claude | Reproducible 2030 PJM-relevant zonal baseline and bounded one-week 2023 back-cast | 15 Mar 2027 | Blocked on TH-003 |
+| [TH-009 (#14)](https://github.com/qasjadullah-design/MSRE-Thesis/issues/14) | Claude | Limited regional scenarios, reproducible run log, cap ≤30 full-year solves | **31 May 2027** | Blocked on TH-006/008 |
 | ANALYSIS | Student + ChatGPT | Cost/curtailment frontier, emissions, reliability proxies and two bookend allocations | **30 Jun 2027** | Planned |
 | WRITING | Student + ChatGPT | Eight chapters and article integrated, verified references, results, supervisor comments | **31 Jul 2027** | Planned |
 
