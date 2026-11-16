@@ -38,6 +38,12 @@ electricity:
   # hosted on Zenodo (record 18435264) and need no scaling data or API key.
   demand:
     profile: eer
+    # Upstream default "population" crashes for the Eastern Interconnection at
+    # v1.0.0: build_bus_population.assign_load_weight reindexes onto bus ids that
+    # still contain duplicates ("cannot reindex on an axis with duplicate labels",
+    # CI run 43809435330). "breakthrough" is upstream's legacy weighting by the
+    # synthetic network's nominal bus demand and avoids that function.
+    bus_allocation: breakthrough
     scenario:
       eer_file: demand_EER2025_Baseline_AEO2023.h5
   renewable_carriers: [onwind, solar, hydro]
