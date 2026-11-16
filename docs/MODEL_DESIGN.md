@@ -117,7 +117,7 @@ When the interruptibility value `V(ε)` is computed later, each figure must stat
 | A10 | On the PJM extract, a zero-load site reproduces the upstream baseline within solver tolerance | none yet | TH-008 |
 | A11 | Runs are reproducible: command, versions, solver and data vintage recorded | `python -m dcaccess`; CI workflow `tests.yml` | in place for the synthetic system |
 
-"Passes" means the test ran and passed on the versions named in `governance/handoffs/TH-004.md`.
+"Passes" means the test ran and passed on the versions named in `governance/handoffs/TH-004.md` (CI run 43822507888).
 
 ## 8. The synthetic test system
 
