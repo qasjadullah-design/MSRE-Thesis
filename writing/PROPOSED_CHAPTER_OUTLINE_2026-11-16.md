@@ -1,3 +1,5 @@
+> **ARCHIVED DRAFT / STUDENT-APPROVED 16 NOV 2026.** Statements below saying 'proposed' or 'not approved' describe the file's historical state prior to user approval. Current authoritative instructions: [Working Scope](https://github.com/qasjadullah-design/MSRE-Thesis/blob/main/governance/APPROVED_WORKING_SCOPE_2026-11-16.md), [Model Design v0.2](https://github.com/qasjadullah-design/MSRE-Thesis/blob/main/docs/MODEL_DESIGN.md), and [Chapter Outline](https://github.com/qasjadullah-design/MSRE-Thesis/blob/main/writing/CHAPTER_OUTLINE.md). Supervisor/university signoff remains unverified.
+
 # PROPOSED THESIS CHAPTER OUTLINE — NOT APPROVED
 **Prepared 16 November 2026** for Section 0.2 of [SCOPE_REFOCUS_2026-11-16](https://github.com/qasjadullah-design/MSRE-Thesis/blob/proposal/scope-refocus-2026-11-16/governance/proposals/SCOPE_REFOCUS_2026-11-16.md). **No changes to official TH-1 title, three objectives or six working milestone dates.**
     
