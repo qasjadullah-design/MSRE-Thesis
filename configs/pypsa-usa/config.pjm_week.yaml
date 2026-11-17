@@ -1,0 +1,63 @@
+# One-week profiling run of the PJM extract: how do run time and memory grow with the horizon?
+#
+# Status: PROFILING ONLY. Not a calibrated or validated PJM baseline, and not a scenario result.
+# Upstream: PyPSA/pypsa-usa v1.0.0 (commit 04a0edd220b1d331715c269a4eab68344c07a088)
+#
+# Identical to config.pjm_smoke.yaml except for the run name and the snapshots
+# (168 hours instead of 24), so that any difference in time or memory comes from
+# the horizon alone. Expansion and economic retirement are still allowed, so the
+# solved capacities and prices remain artefacts of a short horizon.
+#
+# Run in Ubuntu:   RUN=pjm_week bash tools/local_wsl/run_smoke.sh
+
+run:
+  name: "pjm_week"
+  disable_progressbar: true
+
+scenario:
+  interconnect: [eastern]      # PJM sits in the Eastern Interconnection
+  clusters: [22]               # ReEDS zonal backbone: one node per PJM ReEDS zone (22)
+  simpl: [75]                  # resource zones before final clustering. Must be >= 54 here: the PJM cut leaves 54
+                               # country/sub-network groups (CI run 43811176921). 75 is upstream's default.
+  opts: [1h]                   # hourly, no policy constraint tokens
+  scope: "total"
+  planning_horizons: [2030]    # as in upstream's harness; 2030 is an EER model year and has public GODEEEP profiles
+
+model_topology:
+  include:
+    trans_reg: ['PJM']         # ReEDS transmission region; zones p80, p99, p100, p104, p109-p126
+
+snapshots:                     # one Sunday-to-Saturday week in January (168 hours)
+  start: "2019-01-06 00:00"
+  end: "2019-01-12 23:00"
+  inclusive: both
+
+electricity:
+  # Demand: upstream's default (NREL EFS) is served from data.nlr.gov, which
+  # returned HTTP 503 for every request on 15-16 Nov 2026. EER profiles are
+  # hosted on Zenodo (record 18435264) and need no scaling data or API key.
+  demand:
+    profile: eer
+    # Upstream default "population" crashes for the Eastern Interconnection at
+    # v1.0.0: build_bus_population.assign_load_weight reindexes onto bus ids that
+    # still contain duplicates ("cannot reindex on an axis with duplicate labels",
+    # CI run 43809435330). "breakthrough" is upstream's legacy weighting by the
+    # synthetic network's nominal bus demand and avoids that function.
+    bus_allocation: breakthrough
+    scenario:
+      eer_file: demand_EER2025_Baseline_AEO2023.h5
+  renewable_carriers: [onwind, solar, hydro]
+  extendable_carriers:
+    Generator: [solar, onwind, OCGT, CCGT]
+    StorageUnit: [4hr_battery_storage]
+
+solving:
+  solver:
+    name: highs                # open-source; upstream default is Gurobi
+    options: highs-default
+  solver_options:
+    highs-default:
+      # Upstream sets "off". Without crossover HiGHS ended run 43817556991 with
+      # "Model status: Unknown" although the interior-point solve converged, so
+      # optimality was not certified. Crossover gives a basic solution and a status.
+      run_crossover: "on"
