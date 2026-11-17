@@ -108,10 +108,33 @@ How the run went, for the record: the dry run passed (26 jobs). Attempt 1 failed
 
 **If a download stalls** (no progress in the console log and the file size not growing): stop the run with `pkill -INT -f bin/snakemake` and run the script again.
 
+### One-week profiling run (17 November 2026)
+
+`RUN=pjm_week bash ~/thesis/MSRE-Thesis/tools/local_wsl/run_smoke.sh` uses `configs/pypsa-usa/config.pjm_week.yaml`: the smoke configuration with 168 snapshots (6 to 12 January) instead of 24, and nothing else changed. Thesis repo `e992363`, two parallel jobs.
+
+| | One day (24 h) | One week (168 h) |
+|---|---:|---:|
+| Build of the data model | 19 min 19 s, mostly downloads | 4 min 58 s, no downloads |
+| Solve step, wall time | 8 s | 31 s |
+| HiGHS run time | 0.7 s | 21.6 s |
+| Interior-point / crossover iterations | 41 / 4,833 | 53 / 25,845 |
+| HiGHS status | Optimal | Optimal |
+| Peak memory of the solve rule | 461 MB | 731 MB |
+| Peak memory of any rule | 1.84 GB (`cluster_resources`) | 1.75 GB (`cluster_resources`) |
+| Load, peak / mean | 124.7 / 105.9 GW | 148.1 / 124.7 GW |
+
+What this shows, and what it does not:
+
+- The build steps do not depend on the horizon: their memory is about 1.8 GB either way.
+- The solve grows with the horizon. Seven times the snapshots cost about 270 MB more memory and thirty times the solver time, most of it in crossover.
+- **A straight line through these two points puts a full hourly year (8,760 snapshots) at very roughly 17 GB for the solve, more than this laptop has in total.** Two points are a weak basis: treat it as an order of magnitude. A one-month run would give a third point.
+- At 3-hour resolution (2,920 snapshots) the same line gives about 6 GB, which might fit if WSL's memory limit were raised.
+- These runs still allow expansion and economic retirement on a short horizon, so the solved capacities (for example 22 GW of combined cycle kept in the week against 2 GW in the day) and prices are artefacts and not PJM results.
+
 ## 7. Limits
 
 - **Memory.** Linux sees about 7.4 GB. The one-day test peaks at 1.84 GB per rule, so it fits with room to spare at two parallel jobs. Longer horizons will need more: the solve grows with the number of snapshots. If a rule is killed for lack of memory, the limit can be raised with a `.wslconfig` file in the Windows user profile (`[wsl2]`, `memory=12GB`, `swap=8GB`), followed by `wsl --shutdown`. That restarts Ubuntu, so ask the owner first.
-- **Full-year runs.** Whether a full-year 22-zone expansion fits on this laptop has not been tested. Decision D13 (execution environment for full-year runs) stays open until a one-week run has been profiled here.
+- **Full-year runs.** Not tested. The one-day and one-week runs suggest a full hourly year needs on the order of 17 GB for the solve alone, more than this laptop's 15 GB, so decision D13 (execution environment for full-year runs) stays open. Reduced time resolution or representative weeks are the fallbacks named in decision D16.
 - **Disk.** The Linux virtual disk lives on drive C:, which had about 55 GB free. One year of ERA5 weather data for a back-cast is 5 to 9 GB.
 - **Network.** Plain HTTP is blocked on the network used on 16 November. Any future step that downloads over `http://` will fail the same way; prefer `https://` sources.
 - **Keep the PC awake** during a run. WSL stops when Windows sleeps.
