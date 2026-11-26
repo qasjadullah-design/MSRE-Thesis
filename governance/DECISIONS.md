@@ -8,7 +8,7 @@
 | D03 | User-approved working method | PJM-relevant **zonal** regional testbed; no site-specific network congestion claims; real PJM baseline validation still pending |
 | D04 | User-approved working method | Principal 1 GW scenario, plus ~10 GW **aggregate regional load** case; 3 location zones; normalized incremental costs per GW-year |
 | D05 | User-approved working method | Develop/test 3–5-bus physical site and firm-service prototype first |
-| D06 | Open evidence requirement | Verify dated effective FERC/PJM tariff and eligibility terms, priority triggers and obligations (TH-002) |
+| D06 | Dated research findings; implementation evidence gates remain | [TH-002 comparison, 26 Nov 2026](../regulatory/TH-002_CONTRACT_MATRIX_2026-11-26.md) distinguishes ordered framework from November proposed implementation. Current effective-record/clean-sheet verification, manual details and settlement mechanics remain open in its source audit; no new scope approval is implied |
 | D07 | Open empirical limitation | Evidence-graded physical flexibility parameters: actual delivered measured vs trace-modeled vs assumed (TH-005); supervisor acceptance for Objective 2 pending |
 | D08 | User-approved working method | TWO illustrative allocation bookends socialized vs direct cost causation; not actual PJM tariffs/bills; financial incidence assumptions require checks |
 | D09 | User-approved working method | Forward-year capacity expansion followed by dispatch; reserve-margin integration feasibility requires TH-004 testing |
@@ -17,7 +17,7 @@
 | D12 | User-approved working boundary | Earlier local 2025 EIA reconstruction is an independent *benchmark only*, not a parallel model-development workstream; source and licensing checks pending |
 | D13 | Partially resolved / infrastructure | GitHub Linux Actions for smoke/toy tests. Full-year expansion execution environment (Linux VM/HPC) still to be selected based on demonstrated resource requirements |
 | D14 | User-approved method | Candidate historical validation: **one-week 2023 back-cast**, provided accessible data and EIA API key. Not a completed validation |
-| D15 / S1 | User-approved framing; supervisor endorsement unverified | Core FERC co-located / eligible BTMG access classes with one physically modeled generator; G_installed=0 is hypothetical load-only analog, not automatically FERC eligible. Onsite outage with G_installed>0 and P_onsite=0 is allowed. Current tariff status TH-002 open |
+| D15 / S1 | User-approved framing; supervisor endorsement unverified | Core FERC co-located / eligible BTMG access classes with one physically modeled generator; G_installed=0 is hypothetical load-only analog, not automatically FERC eligible. Onsite outage with G_installed>0 and P_onsite=0 is allowed. Current tariff status and remaining evidence gates recorded in the 26 Nov TH-002 comparison |
 | D16 / S2 | User-approved method; supervisor endorsement unverified | Forward-year capacity expansion, then dispatch. Fallback to representative periods if full-year computationally infeasible and disclosed |
 | D17 / S3 | User-approved method; supervisor endorsement unverified | Zonal PJM testbed, no claim of POI congestion, N-1 security, or site deliverability |
 | D18 / S4 | User-approved working method; supervisor endorsement **required** | Evidence-bounded observed/derived/assumed ranges, transparently graded. Cannot claim this satisfies Objective 2's wording on observed behavior without supervisor discussion |
