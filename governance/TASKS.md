@@ -5,7 +5,7 @@
 | ID | Owner | Accepted deliverable | Internal target | State |
 |---|---|---|---|---|
 | TH-001 | ChatGPT | Shared project brief/agent instructions and accepted refocus reflected across GitHub and Drive | 16 Nov 2026 | Implementation in progress |
-| TH-002 (#1) | ChatGPT | One-page primary-source 3-service contract status/withdrawal/curtailment/capacity matrix, incl. S1 | 27 Nov 2026 | Ready (S1 memo prepared; tariff matrix outstanding) |
+| TH-002 (#1) | ChatGPT | One-page primary-source 3-service contract status/withdrawal/curtailment/capacity matrix, incl. S1 | 27 Nov 2026 | [Research pack prepared 26 Nov](../regulatory/TH-002_CONTRACT_MATRIX_2026-11-26.md); independent research review passed; [PR #18](https://github.com/qasjadullah-design/MSRE-Thesis/pull/18) awaiting merge; effective-record/manual gates explicit |
 | TH-003 (#2) | Claude | PJM ReEDS extract Linux smoke test **passing or specific logged blocker**, upstream and environment pinned | 27 Nov 2026 | In progress; no validated PJM result verified |
 | TH-004 (#3) | Claude | Model v0.2 implementation check, firm-contract 3–5 bus prototype and CI unit tests | 18 Dec 2026 | Ready after TH-003 architecture / TH-002 rule review |
 | TH-005 (#4) | ChatGPT | Evidence-graded physically curtailable share, duration and computing-loss cost table; 3 cases, no invented observed values | 18 Dec 2026 | Ready |

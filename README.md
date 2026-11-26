@@ -56,3 +56,11 @@ The GitHub repository is **public**. Do not upload the original signed TH-1, per
 The official topic, objectives and Annex B milestones are documented. **No field-calibrated flexibility dataset, validated regional baseline, implemented three-contract optimization, or numerical research findings have been verified as complete. The simplified allocation method is student-approved but has not generated validated outputs.**
 
 For task ownership, see the issue tracker. For decisions requiring supervisor approval, see DECISIONS.md.
+
+### TH-002 — dated regulatory research, 26 November 2026
+
+- [One-page FCD / NFCD / Interim NITS comparison](regulatory/TH-002_CONTRACT_MATRIX_2026-11-26.md).
+- [PyPSA implementation requirements](docs/TH-002_PYPSA_REQUIREMENTS_2026-11-26.md).
+- [Primary sources, exact provisions and unresolved questions](references/TH-002_SOURCE_AUDIT_2026-11-26.md).
+
+The pack separates FERC's ordered framework from PJM's November proposed implementation. It records remaining effective-record, clean-sheet and operational verification gaps; it is not a claim of currently available service or validated simulation.

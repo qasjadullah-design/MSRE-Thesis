@@ -1,0 +1,28 @@
+# TH-002 — FERC/PJM contract comparison
+
+**As of 26 November 2026 · internal target 27 November 2026 · [Issue #1](https://github.com/qasjadullah-design/MSRE-Thesis/issues/1).** Compact one-page reading sheet; detailed [source audit](../references/TH-002_SOURCE_AUDIT_2026-11-26.md) and [PyPSA requirements](../docs/TH-002_PYPSA_REQUIREMENTS_2026-11-26.md) accompany it.
+
+**Common docket, dates and status — all three services:** [O25], **EL25-49-000 et al., 18 December 2025**, established the framework; [O26], **EL25-49-002 et al., 18 June 2026**, modified it, accepted outline records and directed further compliance (¶¶7–9, 263 n.635; appendix pp.273–274). These are **Commission determinations**. PJM's **16 November 2026 ER27-531-000** implementing filing is a **proposal**: Part XI/agreements request **16 March 2027**, while the separate Fast Energization revisions request an indefinite date ([P26] §V, p.82). **Accepted effectiveness/operational availability of these detailed provisions: not yet established in this review.** The official notice confirms the filing, not approval ([FR26] p.75507).
+
+**Key:** O = ordered framework; P = November proposal, section numbers reported in its filed transmittal. Clean tariff sheets remain unchecked; do not cite P as effective tariff. F/N = reserved firm/non-firm MW; RA = resource adequacy.
+
+| Criterion | Firm Contract Demand (FCD) | Non-Firm Contract Demand (NFCD) | Interim Network Integration Transmission Service (Interim NITS) |
+|---|---|---|---|
+| Eligible arrangement | O: co-located/qualifying BTMG load, able and willing to limit withdrawals ([O26] ¶91). P: also broader Large Load (§708(a)). | Same O eligibility ([O26] ¶91); broader Large Load proposed ([P26] §708(a)). | Same O eligibility ([O26] ¶91); P also Large Load awaiting full-NITS upgrades (§701.1). |
+| Withdrawal right | Specified F MW, energy and capacity ([P26] §708(b), p.38). No required equation tying F to generator/gross load ([O26] ¶¶342–343). | Up to N MW as available; zero-MW reservation possible; not limited to generator-outage hours ([O26] ¶¶342–344; [P26] §§708(b), 710.1). | Studied, interruptible headroom pending full NITS; energy-only ([P26] §§701.1–701.2, p.34). |
+| Curtailment trigger | Maintenance/adverse conditions and firm-service security curtailment; firm is not immunity from emergencies ([P26] §§709.5, 719.2, pp.39,43). | Transmission/security constraints and capacity/reserve shortage ([O26] ¶551; [P26] §719.5, p.44). | Same shortage authority; also upgrades/maintenance/adverse conditions ([O26] ¶551; [P26] §§701.5, 719.5). |
+| Sequence / priority | Equivalent to NITS and firm point-to-point ([O26] ¶551; [P26] §719.2). | Before firm/pre-emergency load response; P same tier as Interim and non-firm point-to-point, based on contribution to system-limit exceedance ([O26] ¶¶551–555; [P26] §719.4). | Before firm/pre-emergency load response; P same non-firm tier, **no blanket NFCD-before-Interim ranking** ([O26] ¶¶551–555; [P26] §719.4). |
+| Capacity / RA | PJM procures capacity based on contract demand ([O26] ¶597, pp.264–265). Exact UCAP/forecast implementation not yet established ([P26] §III.E, p.57). | PJM does not procure capacity or include this service in RA planning ([O26] ¶597). | Same absence of RA procurement; energy-only does not mean free transmission ([O26] ¶¶572, 597). |
+| Upgrade / exit | No automatic interim transition. P includes 42-month FCD termination notice and five-year FCD-to-NFCD restriction ([P26] §§711(b), 709.3). | Separate NFCD-to-FCD upgrade route proposed; requires upgrades, analysis and system updates ([P26] §711(f), F-4 §§2–3, pp.41,48). | **Converts to full NITS** after upgrades plus PJM analysis/system updates ([O26] ¶571; [P26] §702.4(a), F-3A §§2–3). |
+| Fees / key qualification | Capacity/transmission/ancillary obligations; numeric rates not verified ([P26] §§714.3, 714.5, p.41; [C26]). | Ancillary/transmission obligations remain; no assumed discount ([P26] §715.4, p.42; [C26]). | NITS transmission rate ([O26] ¶572). During curtailment, onsite use restricted if generator is a capacity resource ([O26] ¶576). |
+| Unresolved | Effective records, clean sheets, UCAP/forecast mapping, rates: Q1/Q2/Q4/Q5 in audit. | Effective records, clean sheets, operational limit/priority algorithm and physical response: Q1–Q3/Q6. | Same gaps; full-NITS planning/netting and generator status: Q1–Q4/Q6. |
+
+**S1 answer:** retain v0.2's physical generator and separate gross demand, installed/output generation, POI capacity and reservations. Generator outage is different from no generator. The November Large Load expansion is a **separate proposed policy track**, not grounds to silently change the approved core. Correct S1's “¶635” to **[O26] ¶263 n.635, p.132**; the underlying BTMG extension is **¶91, pp.51–52**. Annual ε is a research tolerance, not a tariff guarantee or a definition of firmness.
+
+**Dated sources:** [O25] = 193 FERC ¶61,217 (18-Dec-2025); [O26] = 195 FERC ¶61,209 (18-Jun-2026); [P26] = PJM transmittal (16-Nov-2026), Part XI unless stated; [FR26] = Federal Register (23-Nov-2026); [C26] = PJM filing chart for 16-Nov filings, November 23 workshop. Dates, provenance, exact page map and unresolved items are in the audit.
+
+[O25]: https://www.ferc.gov/sites/default/files/2025-12/E-1%20EL25-49-000.pdf
+[O26]: https://www.ferc.gov/sites/default/files/2026-06/EL25-49-002_0.pdf
+[P26]: https://www.pjm.com/-/media/DotCom/documents/ferc/filings/2026/20261116-er27-531-000.pdf
+[FR26]: https://www.govinfo.gov/content/pkg/FR-2026-11-23/pdf/2026-23765.pdf
+[C26]: https://www.pjm.com/-/media/DotCom/committees-groups/workshops/cllsco/2026/20261123/20261123-item-02---november-16-large-load-and-co-located-load-filings-chart.pdf
